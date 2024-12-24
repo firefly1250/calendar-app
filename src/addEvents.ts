@@ -1,6 +1,7 @@
 import { google, calendar_v3 } from 'googleapis';
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
+import dotenv from 'dotenv';
+import fs from 'fs-extra';
+import path from 'path';
 
 dotenv.config({ path: '.env' });
 dotenv.config({ path: '.token' });
@@ -16,7 +17,8 @@ oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 async function addEvents() {
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
 
-  const events: calendar_v3.Schema$Event[] = JSON.parse(fs.readFileSync('events.json', 'utf8'));
+  const events: calendar_v3.Schema$Event[] = JSON.parse(await fs.readFile('events.json', 'utf8'));
+  const addedEvents: calendar_v3.Schema$Event[] = [];
 
   for (const event of events) {
     try {
@@ -24,11 +26,17 @@ async function addEvents() {
         calendarId: CALENDAR_ID,
         requestBody: event,
       });
-      console.log('Event has been added:', response.data.htmlLink);
+      addedEvents.push(response.data);
     } catch (error) {
       console.error('Error adding event:', error);
     }
   }
+
+  const outputDir = 'output';
+  await fs.ensureDir(outputDir);
+  const timestamp = new Date().toISOString().replace(/[-:T]/g, '').split('.')[0];
+  const outputFilePath = path.join(outputDir, `events-${timestamp}.json`);
+  await fs.writeFile(outputFilePath, JSON.stringify(addedEvents, null, 2));
 }
 
 addEvents();

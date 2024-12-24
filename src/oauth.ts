@@ -1,8 +1,8 @@
 import { google } from 'googleapis';
-import * as dotenv from 'dotenv';
-import * as http from 'http';
-import * as url from 'url';
-import * as fs from 'fs';
+import dotenv from 'dotenv';
+import http from 'http';
+import url from 'url';
+import fs from 'fs-extra';
 
 dotenv.config({ path: '.env' });
 dotenv.config({ path: '.token' });
@@ -20,7 +20,7 @@ async function getAccessToken() {
     access_type: 'offline',
     scope: SCOPES,
   });
-  console.log('Authorize this app by visiting this url:', authUrl);
+  console.log('Authorize this app by visiting this url:\n', authUrl);
 
   http
     .createServer(async (req, res) => {
@@ -30,7 +30,7 @@ async function getAccessToken() {
         res.end('Authentication successful! You can close this tab.');
 
         if (code) {
-          oAuth2Client.getToken(code, (err, token) => {
+          oAuth2Client.getToken(code, async (err, token) => {
             if (err) {
               console.error('Error retrieving access token', err);
               process.exit(1);
@@ -43,15 +43,13 @@ async function getAccessToken() {
             console.log('Token acquired:', token);
 
             const envVars = `ACCESS_TOKEN=${token.access_token}\nREFRESH_TOKEN=${token.refresh_token}\n`;
-            fs.writeFileSync('.token', envVars);
+            await fs.writeFile('.token', envVars);
             process.exit(0);
           });
         }
       }
     })
-    .listen(3000, () => {
-      console.log('Server is listening on port 3000');
-    });
+    .listen(3000);
 }
 
 getAccessToken();
