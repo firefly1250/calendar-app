@@ -15,7 +15,7 @@ CLIENT_SECRET=
 Run the following command to authenticate and obtain the access token and refresh token:
 
 ```sh
-npm run auth
+npx tsx src/oauth.ts
 ```
 
 ## Add Events
@@ -56,7 +56,7 @@ Submit the following prompt to ChatGPT and paste the output into `events.json`:
 Run the following command to add events to your Google Calendar:
 
 ```sh
-npm run addEvents
+npx tsx src/addEvents.ts
 ```
 
 ### For Developers
