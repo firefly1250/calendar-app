@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node -r esbuild-register src/index.ts",
+    "auth": "node -r esbuild-register src/oauth.ts ",
+    "addEvents": "node -r esbuild-register src/addEvents.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "check-format": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
@@ -19,5 +20,10 @@
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
     "typescript-eslint": "^8.18.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "google-auth-library": "^9.15.0",
+    "googleapis": "^144.0.0"
   }
 }
