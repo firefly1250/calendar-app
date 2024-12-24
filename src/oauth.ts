@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import http from 'http';
 import url from 'url';
 import fs from 'fs-extra';
+import open from 'open';
 
 dotenv.config({ path: '.env' });
 dotenv.config({ path: '.token' });
@@ -21,6 +22,9 @@ async function getAccessToken() {
     scope: SCOPES,
   });
   console.log('Authorize this app by visiting this url:\n', authUrl);
+
+  // Automatically open the authorization URL in the default browser
+  await open(authUrl);
 
   http
     .createServer(async (req, res) => {
