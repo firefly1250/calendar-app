@@ -30,6 +30,7 @@ Submit the following prompt to ChatGPT and paste the output into `events.json`:
 - start は 記載された時間
 - end は start の3時間後
 - 年は 2025年
+- description は 最後が E の場合は Exception, F の場合は Fortuna
 
 ### 日程
 
@@ -47,7 +48,8 @@ Submit the following prompt to ChatGPT and paste the output into `events.json`:
     "end": {
       "dateTime": "2024-12-25T11:00:00+09:00",
       "timeZone": "Asia/Tokyo"
-    }
+    },
+    "description": "Fortuna"
   }
 ]
 
